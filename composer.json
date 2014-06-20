@@ -1,0 +1,24 @@
+{
+    "name": "h3r2on/acs",
+    "description": "A package for inteacting with Appcelerator Cloud Services",
+    "keywords": ["ACS", "appcelerator", "titanium"],
+    "homepage": "http://h3r2on.com/laravel-acs",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joel Herron",
+            "email": "herronj@gmail.com",
+            "homepage": "http://h3r2on.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "H3r2on\\Acs": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
