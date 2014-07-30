@@ -30,7 +30,7 @@ class Acs {
     return static::send('put', $url, $data, $secure);
   }
 
-  protected static function __construct()
+  public function __construct()
   {
     $this->apiUrl = Config::get('acs::apiUrl');
     $this->appKey = Config::get('acs::appKey');
