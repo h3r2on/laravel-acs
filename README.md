@@ -14,4 +14,19 @@ To set your api key run the following artisan command
 
 Then navigate to `app/config/packages/h3r2on/acs` and edit the `config.php` file to add your ACS app key.
 
+Setup the provider and aliases: Add the following to `app/config/app.php`
+	
+	'providers' => array(
+
+	   ...
+       'H3r2on\Acs\AcsServiceProvider',
+
+and to the aliases
+
+    'aliases' => array(
+
+        ...
+        'Acs'             => 'H3r2on\Acs\Facades\Acs',
+    )     
+
 ## Usage
