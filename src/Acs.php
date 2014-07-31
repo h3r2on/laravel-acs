@@ -37,7 +37,7 @@ class Acs {
   }
 
   protected static function send($verb, $url, $data, $secure) {
-    $uri = $this->buildUrl($url, $secure) . ($verb == 'get' ? '&'. http_build_query($data) : '');
+    $uri = self::buildUrl($url, $secure) . ($verb == 'get' ? '&'. http_build_query($data) : '');
 
     $ch = curl_init($url);
 
@@ -82,7 +82,7 @@ class Acs {
   protected static function buildUrl($url,$secure=TRUE)
   {
     $finalUrl = ($secure === TRUE) ? 'https://' : 'http://';
-    $finalUrl .= $this->apiUrl . $url . '?key=' . $this->appKey;
+    $finalUrl .= this->$apiUrl . $url . '?key=' . $this->appKey;
 
     return $finalUrl;
   }

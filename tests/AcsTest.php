@@ -13,7 +13,7 @@
 namespace H3r2on\Acs\Test;
 
 use H3r2on\Acs\Acs;
-use Mockery as m;
+use \Mockery as m;
 
 class AcsTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,15 +30,21 @@ class AcsTest extends \PHPUnit_Framework_TestCase
 
   public function testGet()
   {
-    $response = ACS::get('users/show.json');
-    $content = json_decode($response);
-    $this->assertSame(JSON_ERROR_NONE, json_last_error());
-    $this->assertSame('ok',$content->meta->status);
+    $mock = m::mock('alias:H3r2on\Acs');
+    $mock->shouldReceive('get')
+         ->with('users/show.json')
+         ->andReturnUsing(function($data){
+          if ($data->meta->status === 'ok') {
+            return true;
+          } else {
+            return false;
+          }
+         });
   }
 
   public function testPost()
   {
-
+    
   }
 
   public function testPut()
