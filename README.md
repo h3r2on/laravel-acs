@@ -1,5 +1,7 @@
 # laravel-acs
 
+[![Build Status](https://travis-ci.org/h3r2on/laravel-acs.svg?branch=master)](https://travis-ci.org/h3r2on/laravel-acs)
+
 A package to interface with Appcelerator Cloud Services
 
 ## Installation
