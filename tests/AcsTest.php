@@ -30,9 +30,9 @@ class AcsTest extends \PHPUnit_Framework_TestCase
 
   public function testGet()
   {
-    $mock = m::mock('alias:H3r2on\Acs');
+    $mock = m::mock('Acs');
     $mock->shouldReceive('get')
-         ->with('users/show.json')
+         ->with('users/search.json')
          ->andReturnUsing(function($data){
           if ($data->meta->status === 'ok') {
             return true;

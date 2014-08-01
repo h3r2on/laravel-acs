@@ -2,44 +2,52 @@
 
 class Acs {
 
-  protected $apiUrl;
-	protected $appKey;
+	protected $apiUrl;
+  protected $appKey;
 	protected $email;
 	protected $password;
 	protected $_cookie = '/tmp/appcookie';
 	protected $_errors;
 
 
-  public static function delete($url, $data = null, $secure = TRUE)
+  public function delete($url, $data = null, $secure = TRUE)
   {
-    return static::send('delete', $url, $data, $secure);
+    return $this->send('delete', $url, $data, $secure);
   }
 
-  public static function get($url, $data = null, $secure = TRUE)
+  public function get($url, $data = null, $secure = TRUE)
   {
-    return static::send('get', $url, $data, $secure);
+    
+    return $this->send('get', $url, $data, $secure);
   }
 
-  public static function post($url, $data = null, $secure = TRUE)
+  public function post($url, $data = null, $secure = TRUE)
   {
-    return static::send('post', $url, $data, $secure);
+    return $this->send('post', $url, $data, $secure);
   }
 
-  public static function put($url, $data = null, $secure = TRUE)
+  public function put($url, $data = null, $secure = TRUE)
   {
-    return static::send('put', $url, $data, $secure);
+    return $this->send('put', $url, $data, $secure);
   }
 
   public function __construct()
   {
-    $this->apiUrl = Config::get('acs::apiUrl');
-    $this->appKey = Config::get('acs::appKey');
+    $this->apiUrl = \Config::get("acs::api.apiurl");
+    $this->appKey = \Config::get("acs::api.appkey");
   }
 
-  protected static function send($verb, $url, $data, $secure) {
-    $uri = self::buildUrl($url, $secure) . ($verb == 'get' ? '&'. http_build_query($data) : '');
+  protected function send($verb, $url, $data, $secure) {
+    $baseUri = $this->buildUrl($url, $secure);
 
-    $ch = curl_init($url);
+    if(!empty($data) && $verb == 'get') {
+    	$uri =  $baseUri . '&'. http_build_query($data);
+    } else {
+    	$uri =  $baseUri; 
+    }
+    
+
+    $ch = curl_init($uri);
 
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $this->_cookie);
 		curl_setopt($ch, CURLOPT_COOKIEFILE, $this->_cookie);
@@ -79,10 +87,10 @@ class Acs {
 		return json_decode($output, true);
   }
 
-  protected static function buildUrl($url,$secure=TRUE)
+  protected function buildUrl($url,$secure=TRUE)
   {
     $finalUrl = ($secure === TRUE) ? 'https://' : 'http://';
-    $finalUrl .= this->$apiUrl . $url . '?key=' . $this->appKey;
+    $finalUrl .= $this->apiUrl . $url . '?key=' . $this->appKey;
 
     return $finalUrl;
   }

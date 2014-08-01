@@ -18,7 +18,7 @@ class AcsServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('h3r2on/acs');
+		$this->package('h3r2on/acs', null, __DIR__);
 	}
 
 	/**

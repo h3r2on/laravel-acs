@@ -7,6 +7,7 @@
  * @return  array holds the ACS API url and your App Key
  */
 return array(
-  'apiUrl' => 'api.cloud.appcelerator.com/v1/',
-  'appKey' => 'c5h1vj2xgoBIioaHiWdJYeIZkSo3uUix'
+  'apiurl' => 'api.cloud.appcelerator.com/v1/',
+
+  'appkey' => 'c5h1vj2xgoBIioaHiWdJYeIZkSo3uUix',
 );
