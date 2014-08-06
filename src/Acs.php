@@ -6,9 +6,16 @@ class Acs {
   protected $appKey;
 	protected $email;
 	protected $password;
-	protected $_cookie = '/tmp/appcookie';
+	protected $cookiePath;
 	protected $_errors;
 
+
+  public function __construct()
+  {
+    $this->apiUrl = \Config::get("acs::api.apiurl");
+    $this->appKey = \Config::get("acs::api.appkey");
+		$this->cookiePath = app_path() . '/tmp/cookies/';
+  }
 
   public function delete($url, $data = null, $secure = TRUE)
   {
@@ -17,7 +24,7 @@ class Acs {
 
   public function get($url, $data = null, $secure = TRUE)
   {
-    
+
     return $this->send('get', $url, $data, $secure);
   }
 
@@ -31,47 +38,90 @@ class Acs {
     return $this->send('put', $url, $data, $secure);
   }
 
-  public function __construct()
+  public function attempt($email, $password)
   {
-    $this->apiUrl = \Config::get("acs::api.apiurl");
-    $this->appKey = \Config::get("acs::api.appkey");
+    $userInfo = $this->authenticate($email, $password);
+
+    if($userInfo) {
+      return $userInfo;
+
+    } else {
+
+      return false;
+    }
+
   }
 
-  protected function send($verb, $url, $data, $secure) {
+  protected function authenticate($email, $password)
+  {
+    $login = array(
+			'login'    => $email,
+			'password' => $password
+		);
+
+		$sessionId = \Session::getId();
+
+		$ch = curl_init($this->buildUrl('users/login.json'));
+
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookiePath.'jar_'.$sessionId.'.data');
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookiePath.'jar_'.$sessionId.'.data');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_POST, TRUE);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $login);
+
+		$login = curl_exec($ch);
+		if($login == FALSE) {
+			print_r(curl_error($ch));
+		}
+
+		$response = json_decode($login, true);
+
+		$user = $response['response']['users'][0];
+
+		return array(
+			'id'    => $user['id'],
+			'cn'    => $user['first_name'] . ' ' . $user['last_name'],
+			'role'	=> $user['role'],
+			'email'	=> $user['email']
+		);
+  }
+
+  protected function send($verb, $url, $data, $secure)
+  {
     $baseUri = $this->buildUrl($url, $secure);
 
     if(!empty($data) && $verb == 'get') {
     	$uri =  $baseUri . '&'. http_build_query($data);
     } else {
-    	$uri =  $baseUri; 
+    	$uri =  $baseUri;
     }
-    
 
-    $ch = curl_init($uri);
+		$sessionId = \Session::getId();
 
-		curl_setopt($ch, CURLOPT_COOKIEJAR, $this->_cookie);
-		curl_setopt($ch, CURLOPT_COOKIEFILE, $this->_cookie);
+		$ch = curl_init($uri);
+
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookiePath.'jar_'.$sessionId.'.data');
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookiePath.'jar_'.$sessionId.'.data');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
 		switch ($verb)
 		{
-			case 'get':
+			case 'GET':
 				curl_setopt($ch, CURLOPT_HTTPGET, TRUE);
 				break;
-
-			case 'post':
+			case 'POST':
 				curl_setopt($ch, CURLOPT_POST, TRUE);
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 				break;
-
-			case 'put':
+			case 'PUT':
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 				break;
-
-			case 'delete':
+			case 'DELETE':
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 				break;

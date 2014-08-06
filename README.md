@@ -10,25 +10,27 @@ To install the following to your composer.json
 
     "h3r2on/acs" : "*"
 
-To set your api key run the following artisan command
+Add the service provider and alias to app/config/app.php:
 
-    php artisan php config:publish h3r2on/acs
+	'H3r2on\Acs\AcsServiceProvider',
 
-Then navigate to `app/config/packages/h3r2on/acs` and edit the `config.php` file to add your ACS app key.
+  'Acs' => 'H3r2on\Acs\Facades\Acs',
 
-Setup the provider and aliases: Add the following to `app/config/app.php`
-	
-	'providers' => array(
+To publish the configuration file you'll have to:
 
-	   ...
-       'H3r2on\Acs\AcsServiceProvider',
+   artisan config:publish h3r2on/acs
 
-and to the aliases
 
-    'aliases' => array(
+## Basic Usage
 
-        ...
-        'Acs'             => 'H3r2on\Acs\Facades\Acs',
-    )     
+In your contoller or route:
 
-## Usage
+    $result = Acs::get('user/search.json');
+
+    //do somehting with the returned object
+
+### Using Authenticated API's or as an Authentication provider for ACS Users
+
+To use API's that require user authentication you will need to use a third party authentication provider. I've chosen [Sentry](https://cartalyst.com/manual/sentry), if you'd like to use this and use a different Auth manager create a issue.
+
+In your login controller:
