@@ -27,10 +27,10 @@ In your contoller or route:
 
     $result = Acs::get('user/search.json');
 
-    //do somehting with the returned object
+    //do something with the returned object
 
 ### Using Authenticated API's or as an Authentication provider for ACS Users
 
 To use API's that require user authentication you will need to use a third party authentication provider. I've chosen [Sentry](https://cartalyst.com/manual/sentry), if you'd like to use this and use a different Auth manager create a issue.
 
-In your login controller:
+TODO: Complete usage
