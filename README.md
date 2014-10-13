@@ -8,7 +8,7 @@ A package to interface with Appcelerator Cloud Services
 
 To install the following to your composer.json
 
-    "h3r2on/acs" : "*"
+    "h3r2on/acs" : "dev-master"
 
 Add the service provider and alias to app/config/app.php:
 
