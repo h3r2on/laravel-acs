@@ -12,9 +12,9 @@ To install the following to your composer.json
 
 Add the service provider and alias to app/config/app.php:
 
-	'H3r2on\Acs\AcsServiceProvider',
-
-        'Acs' => 'H3r2on\Acs\Facades\Acs',
+    'H3r2on\Acs\AcsServiceProvider',
+    
+    'Acs' => 'H3r2on\Acs\Facades\Acs',
 
 To publish the configuration file you'll have to:
 
