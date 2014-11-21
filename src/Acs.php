@@ -19,23 +19,23 @@ class Acs {
 
   public function delete($url, $data = null, $secure = TRUE)
   {
-    return $this->send('delete', $url, $data, $secure);
+    return $this->send('DELETE', $url, $data, $secure);
   }
 
   public function get($url, $data = null, $secure = TRUE)
   {
 
-    return $this->send('get', $url, $data, $secure);
+    return $this->send('GET', $url, $data, $secure);
   }
 
   public function post($url, $data = null, $secure = TRUE)
   {
-    return $this->send('post', $url, $data, $secure);
+    return $this->send('POST', $url, $data, $secure);
   }
 
   public function put($url, $data = null, $secure = TRUE)
   {
-    return $this->send('put', $url, $data, $secure);
+    return $this->send('PUT', $url, $data, $secure);
   }
 
   public function attempt($email, $password)
@@ -92,7 +92,7 @@ class Acs {
   {
     $baseUri = $this->buildUrl($url, $secure);
 
-    if(!empty($data) && $verb == 'get') {
+    if(!empty($data) && $verb == 'GET') {
     	$uri =  $baseUri . '&'. http_build_query($data);
     } else {
     	$uri =  $baseUri;
